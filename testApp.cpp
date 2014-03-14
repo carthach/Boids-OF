@@ -44,13 +44,14 @@ void testApp::draw(){
 	verdana14.drawString("Framerate: " + ofToString(ofGetFrameRate()), start.x, start.y );
 	verdana14.drawString("No of Boids: " + ofToString(boids.size()), start.x, start.y+20);
 
-    
+    //Draw boids
     for(int i=0; i<boids.size(); i++)
         boids[i].draw();
 }
 
 //--------------------------------------------------------------
 void testApp::keyPressed(int key){
+    //Add/delete boids 
     if (key == '=') {
         boids.push_back(Boid());
     } else if(key == '-')

@@ -30,11 +30,18 @@ private:
     static const float SEEDVELOCITY = 5.0f;
     static const float RADIUS = 5.0f;
     static const float MAXVELOCITY = 8.0f;
-    static const float MIN_DISTANCE = 8.0f;
+    static const float MIN_DISTANCE = 8.0f; //8.0f
+    static const int ANIMATECOUNTERMAX = 20;
     
     ofVec2f flock(vector<Boid>& boids);
     ofVec2f separate(vector<Boid>& boids);
     ofVec2f align(vector<Boid>& boids);
+    
+    ofVec2f avgPosOfOthers;
+    ofVec2f avgVelOfOthers;
+    
+    bool animateCounterIncreasing;
+    int animateCounter;
     
     void clampPosition();
     void clampVelocity();

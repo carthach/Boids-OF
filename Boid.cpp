@@ -14,6 +14,9 @@ Boid::Boid()
     position = ofVec2f(ofRandom(ofGetWindowWidth()),ofRandom(ofGetWindowHeight()));
     velocity = ofVec2f(ofRandom(SEEDVELOCITY),ofRandom(SEEDVELOCITY));
     color = ofColor(ofRandom(255), ofRandom(255), ofRandom(255),180.0f);
+    
+    animateCounter = 0;
+    animateCounterIncreasing = true;
 
 }
 Boid::Boid(ofVec2f position, ofVec2f velocity, ofColor color)
@@ -78,9 +81,47 @@ void Boid::clampVelocity()
 }
 void Boid::draw()
 {
-    ofSetColor(color);
+//    ofSetColor(color);
+    ofSetColor(50,200);
     ofFill();
-    ofCircle(position.x, position.y, RADIUS);
+    
+//DRAW CIRCLES
+//    ofCircle(position.x, position.y, RADIUS);
+    float theta = atan2(velocity.y, velocity.x);
+
+    
+    ofPushMatrix();
+    ofTranslate(position.x, position.y);
+    
+
+    ofMesh quad;
+    
+    // first triangle
+    quad.addVertex(ofVec3f(0, 0, 1));
+    quad.addVertex(ofVec3f(0, 20, 1));
+    quad.addVertex(ofVec3f(-20-animateCounter, 25 + animateCounter, 1));
+    
+    quad.addVertex(ofVec3f(0, 0, 1));
+    quad.addVertex(ofVec3f(0, 20, 1));
+    quad.addVertex(ofVec3f(20+animateCounter, 25+animateCounter, 1));
+
+    ofRotate(ofRadToDeg(theta) + 90);
+    quad.draw(); // now you'll see a square
+    ofPopMatrix();
+    
+
+    if(animateCounter<=ANIMATECOUNTERMAX && animateCounterIncreasing){
+        animateCounter++;
+        
+        if(animateCounter == ANIMATECOUNTERMAX)
+            animateCounterIncreasing = false;
+    }
+    else{
+        animateCounter--;
+        
+        if(animateCounter == 0)
+            animateCounterIncreasing = true;
+    }
 }
 
 /*
@@ -100,7 +141,7 @@ ofVec2f Boid::flock(vector<Boid>& boids)
             n++;
         }
     }
-    ofVec2f avgPosOfOthers = (sumOfPosOfOthers) / (float)n;
+     avgPosOfOthers = (sumOfPosOfOthers) / (float)n;
     ofVec2f changes = (avgPosOfOthers - this->position) / 100.0f;
     return changes;
 }
@@ -139,7 +180,7 @@ ofVec2f Boid::align(vector<Boid>& boids)
             n++;
         }
     }
-    ofVec2f avgVelOfOthers = sumOfVelOfOthers / (float)n;
+    avgVelOfOthers = sumOfVelOfOthers / (float)n;
     ofVec2f changes = (avgVelOfOthers - this->velocity) / 20.0f;
     return changes;
 }
